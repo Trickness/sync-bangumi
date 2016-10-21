@@ -1,24 +1,13 @@
-var https = require('http')
-var xmldom = require('xmldom')
-var name = encodeURI("一拳")
-var analyse_rss_acg_rip = require('./utils/analyse-rss.js').analyse_rss_acr_rip
-var analyse_file_name   = require('./utils/analyse-file-name.js').analyse_file_name
-var downloader          = new (require('./utils/local-file-manager.js').downloader)()
+var config = require('./config.js');
+var manager = require('./utils/local-file-manager.js').manager;
+var analyse_file = require('./utils/analyse-file-name.js').analyse_file_name;
+var rssManager = require('./utils/analyse-rss.js');
+global.dlr              = new (require('./utils/local-file-manager.js').downloader)();
 
 var text = `http://localhost/test.xml`;
 
-var respons_callback = (d) => {
-    //console.log(analyse_rss_acg_rip(d.toString()))
-    //console.log(analyse_file_name('[诸神字幕组][排球少年!!乌野高中VS白鸟泽学园高中][第三季][02][1080P][简繁日字幕][MKV]'))
+var rssManagerList = [];
 
-    downloader.download_from_torrent_url('https://acg.rip/t/167633.torrent')
-    //console.log(downloader);
-}
-
-console.log(text);
-
-https.get(text, (res) => {
-    res.on('data', respons_callback)
-}).on('error', (e) => {
-    console.log(e);
-});
+var mgr = new manager('夏目友人帐',global.dlr,config.bangumi_filter[0]);
+mgr.refreshRss();
+//console.log(analyse_file('[澄空学园&华盟字幕社][10月新番] Sound!Euphonium2 吹响吧！悠风号2 第02话 MP4 1080p HEVC'));
