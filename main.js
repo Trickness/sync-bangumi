@@ -1,3 +1,4 @@
+"use strict";
 var config = require('./config.js');
 var manager = require('./utils/local-file-manager.js').manager;
 var analyse_file = require('./utils/analyse-file-name.js').analyse_file_name;

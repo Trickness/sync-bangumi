@@ -3,7 +3,7 @@ var spawn = require('child_process').spawn;
 var config = require('../config.js');
 var analyse_file_name   = require('./analyse-file-name.js').analyse_file_name;
 var rssManager= require('./analyse-rss.js');
-var url = 'https://acg.rip/?term=';
+var url = 'https://acg.rip/.xml?term=';
 
 var indexOf = (array, key) => {
     for (let i = 0; i < array.length; ++i){
@@ -84,12 +84,10 @@ class statusManager {
             }
         }
         this.bangumi_newest_date = nd;
-        //console.log(rssListFilted);
-        //console.log(nd.toString());
         this.download(rssListFilted);
     }
     refreshRss(){
-        //console.log("Refresh");
+        console.log(this.rssUrl);
         https.get(this.rssUrl, (res) => {
         //https.get('http://localhost/test.xml', (res) => {
             res.on('data', (d) => {
@@ -107,7 +105,6 @@ class statusManager {
         rssList.forEach((v) => {
             this.downloader.download_from_torrent_url(v.torrentUrl);
         },this);
-        //this.downloader.download_from_torrent_url();
     }
 }
 
