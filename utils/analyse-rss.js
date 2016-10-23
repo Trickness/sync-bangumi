@@ -9,7 +9,7 @@ var analyse_rss_acg_rip = (d) => {
             'title' : items[i].getElementsByTagName('title')[0].firstChild.data,
             'description' : items[i].getElementsByTagName('description')[0].firstChild.data,
             'pubDate' : new Date(items[i].getElementsByTagName('pubDate')[0].firstChild.data),
-            'torrentUrl' : items[0].getElementsByTagName('enclosure')[0].getAttribute('url')
+            'torrentUrl' : items[i].getElementsByTagName('enclosure')[0].getAttribute('url')
         }
         result[i] = t;
     }

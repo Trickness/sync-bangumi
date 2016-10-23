@@ -1,4 +1,4 @@
-var https = require('https');
+var https = require('http');
 var spawn = require('child_process').spawn;
 var config = require('../config.js');
 var analyse_file_name   = require('./analyse-file-name.js').analyse_file_name;
@@ -71,6 +71,8 @@ class statusManager {
                 rssListFilted.push(v);
             }
         }
+                console.log(rssListFilted);
+
         let nd = this.bangumi_newest_date;
         let od = this.bangumi_newest_date;
         let len = rssListFilted.length;
@@ -88,11 +90,11 @@ class statusManager {
     }
     refreshRss(){
         console.log(this.rssUrl);
-        https.get(this.rssUrl, (res) => {
-        //https.get('http://localhost/test.xml', (res) => {
+        //https.get(this.rssUrl, (res) => {
+        https.get('http://localhost/test.xml', (res) => {
             res.on('data', (d) => {
                 this.analyseRss(d);
-                let oneSecond = 1000 * 30; // one second = 0.5 min
+                let oneSecond = 1000 * 60 * 60 * 6; // one second = 0.5 min
                 setTimeout(() => {
                     this.refreshRss();
                 }, oneSecond);
@@ -103,7 +105,7 @@ class statusManager {
     }
     download(rssList){
         rssList.forEach((v) => {
-            this.downloader.download_from_torrent_url(v.torrentUrl);
+            this.downloader.download_from_torrent_url(v.torrentUrl,this.bangumi_name);
         },this);
     }
 }
@@ -119,8 +121,8 @@ class downloader {
             }
         }
     }
-    download_from_torrent_url(torrent_url){ // ,'--follow-torrent=true'
-        var dlr = spawn('aria2c',[torrent_url ,'--follow-torrent=true',`--dir=${config.config_out_dir}`,`--log=${config.config_log_file}`])
+    download_from_torrent_url(torrent_url,sub_dir = ""){ // ,'--follow-torrent=true'
+        var dlr = spawn('aria2c',[torrent_url ,'--follow-torrent=true',`--dir=${config.config_out_dir}/${sub_dir}`]);
         this.download_list.push(dlr);
         dlr.on('exit',(code, signal) => {
             if (code !== 0){
